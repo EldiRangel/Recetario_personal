@@ -42,8 +42,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "b9612e42-c44b-4e88-831a-8585a69e18d9"
+        "projectId": "935f8189-6f53-466b-b095-6614528dfdf0"
       }
-    }
+    },
+    "owner": "luisemilio2006"
   }
 }

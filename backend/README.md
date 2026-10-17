@@ -58,8 +58,8 @@ requiere IPv6.
 3. Cuando Render pida el valor de `DATABASE_URL`, pega la cadena de Supabase
    (Session pooler, con la contraseña ya puesta). `JWT_SECRET` se genera solo.
 4. Espera a que el servicio pase a **Live**. La API queda en
-   `https://recetario-api.onrender.com`.
-5. Prueba `https://recetario-api.onrender.com/api/health`: debe responder
+   `https://recetario-api-y4ki.onrender.com`.
+5. Prueba `https://recetario-api-y4ki.onrender.com/api/health`: debe responder
    `{"ok":true,"service":"recetario-api"}`.
 
 > Los servicios gratis de Render se duermen pasados unos minutos sin tráfico:
@@ -70,7 +70,7 @@ requiere IPv6.
 En la raíz del proyecto (app Expo) el archivo `.env` define la URL:
 
 ```
-EXPO_PUBLIC_API_URL=https://recetario-api.onrender.com
+EXPO_PUBLIC_API_URL=https://recetario-api-y4ki.onrender.com
 ```
 
 Para builds con EAS, esa variable debe estar disponible; puedes definirla en

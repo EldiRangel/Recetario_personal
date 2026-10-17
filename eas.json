@@ -11,10 +11,16 @@
       "distribution": "internal",
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://recetario-api-y4ki.onrender.com"
       }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://recetario-api-y4ki.onrender.com"
+      }
     }
   },
   "submit": {
