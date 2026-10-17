@@ -5,12 +5,11 @@ import { Button } from '@/components/Button';
 import { ThemedText } from '@/components/themed-text';
 import { Card } from '@/components/ui/card';
 import { EmptyState } from '@/components/ui/empty-state';
-import { Icon, Icons } from '@/components/ui/icon';
+import { Icons } from '@/components/ui/icon';
 import { IconButton } from '@/components/ui/icon-button';
 import { Screen } from '@/components/ui/screen';
 import { Spacing } from '@/constants/theme';
 import { useApp } from '@/context/AppContext';
-import { useTheme } from '@/hooks/use-theme';
 import { Recipe } from '@/types';
 
 export default function RecipesIndexScreen() {
@@ -26,7 +25,7 @@ export default function RecipesIndexScreen() {
   const handleDelete = (recipe: Recipe) => {
     Alert.alert('Borrar receta', `¿Deseas eliminar "${recipe.title}"? Se desvinculará de todos los grupos.`, [
       { text: 'Cancelar', style: 'cancel' },
-      { text: 'Eliminar', style: 'destructive', onPress: () => deleteRecipe(recipe.id) },
+      { text: 'Eliminar', style: 'destructive', onPress: () => void deleteRecipe(recipe.id) },
     ]);
   };
 

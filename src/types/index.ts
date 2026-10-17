@@ -8,7 +8,8 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  password: string;
+  /** La contraseña solo viaja al registro/login; nunca se guarda en el cliente. */
+  password?: string;
   avatar?: string;
   createdAt: string;
 }

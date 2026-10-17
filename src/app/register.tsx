@@ -21,7 +21,7 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     setError('');
     const trimmedName = name.trim();
     const trimmedEmail = email.trim();
@@ -51,8 +51,9 @@ export default function RegisterScreen() {
     }
     // Al registrarse, el estado global cambia y las rutas protegidas
     // redirigen automáticamente a la pantalla principal.
-    if (!register(name, email, password)) {
-      setError('Ya existe una cuenta registrada con este correo.');
+    const errorMessage = await register(name, email, password);
+    if (errorMessage) {
+      setError(errorMessage);
     }
   };
 

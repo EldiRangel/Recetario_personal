@@ -52,7 +52,7 @@ function NewRecipeForm() {
     setSelectedGroupIds((prev) => (prev.includes(id) ? prev.filter((g) => g !== id) : [...prev, id]));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setError('');
     const trimmedTitle = title.trim();
     if (!trimmedTitle) {
@@ -73,7 +73,7 @@ function NewRecipeForm() {
       .map((i) => ({ id: String(Date.now() + Math.random()), name: i.name.trim(), quantity: i.quantity.trim() }));
     const st = steps.filter((s) => s.trim());
 
-    const ok = addRecipe({
+    const errorMessage = await addRecipe({
       title: title.trim(),
       description: description.trim(),
       ingredients: ing,
@@ -86,12 +86,12 @@ function NewRecipeForm() {
       isPublic: true,
     });
 
-    if (!ok) {
-      setError('Ya existe una receta con este título.');
+    if (errorMessage) {
+      setError(errorMessage);
       return;
     }
 
-   
+    // Regresar a la pantalla anterior
     if (router.canGoBack()) {
       router.back();
     } else {

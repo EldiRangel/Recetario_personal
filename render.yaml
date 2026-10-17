@@ -1,0 +1,19 @@
+# Blueprint de Render: crea el servicio web (API) automáticamente al conectar
+# este repositorio desde el panel de Render.
+#
+# La base de datos vive en Supabase, así que DATABASE_URL se configura a mano
+# una sola vez en el panel de Render (Dashboard → tu servicio → Environment).
+services:
+  - type: web
+    name: recetario-api
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false

@@ -43,7 +43,7 @@ function GroupEditForm({ group }: { group: Group }) {
   const [description, setDescription] = useState(group.description ?? '');
   const [error, setError] = useState('');
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setError('');
     const trimmedName = name.trim();
     if (!trimmedName) {
@@ -54,12 +54,12 @@ function GroupEditForm({ group }: { group: Group }) {
       setError(`El nombre debe tener entre ${LIMITS.groupName.min} y ${LIMITS.groupName.max} caracteres.`);
       return;
     }
-    const ok = updateGroup(group.id, {
+    const errorMessage = await updateGroup(group.id, {
       name: name.trim(),
       description: description.trim() || undefined,
     });
-    if (!ok) {
-      setError('Ya existe otro grupo con este nombre.');
+    if (errorMessage) {
+      setError(errorMessage);
       return;
     }
     router.dismissTo(`/groups/${group.id}`);

@@ -43,7 +43,7 @@ export default function GroupDetailScreen() {
       `¿Quitar "${recipe.title}" del grupo "${group.name}"? La receta no se borrará, solo dejará de pertenecer a este grupo.`,
       [
         { text: 'Cancelar', style: 'cancel' },
-        { text: 'Quitar', onPress: () => removeRecipeFromGroup(recipe.id, group.id) },
+        { text: 'Quitar', onPress: () => void removeRecipeFromGroup(recipe.id, group.id) },
       ]
     );
   };
@@ -58,12 +58,13 @@ export default function GroupDetailScreen() {
           text: 'Eliminar',
           style: 'destructive',
           onPress: () => {
-            deleteGroup(group.id);
-            if (router.canGoBack()) {
-              router.back();
-            } else {
-              router.replace('/groups');
-            }
+            void deleteGroup(group.id).then(() => {
+              if (router.canGoBack()) {
+                router.back();
+              } else {
+                router.replace('/groups');
+              }
+            });
           },
         },
       ]

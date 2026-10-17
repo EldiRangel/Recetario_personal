@@ -28,7 +28,7 @@ export default function GroupsIndexScreen() {
       `Al eliminar "${group.name}" se borrarán las recetas que solo pertenecen a este grupo. Las recetas compartidas con otros grupos se desvincularán de este.`,
       [
         { text: 'Cancelar', style: 'cancel' },
-        { text: 'Eliminar', style: 'destructive', onPress: () => deleteGroup(group.id) },
+        { text: 'Eliminar', style: 'destructive', onPress: () => void deleteGroup(group.id) },
       ]
     );
   };

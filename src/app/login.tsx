@@ -20,7 +20,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     setError('');
     if (!email.trim() || !password) {
       setError('Escribe tu correo y tu contraseña.');
@@ -36,8 +36,9 @@ export default function LoginScreen() {
     }
     // Si las credenciales son válidas, el estado global cambia y las rutas
     // protegidas redirigen automáticamente a la pantalla principal.
-    if (!login(email, password)) {
-      setError('Correo o contraseña incorrectos.');
+    const errorMessage = await login(email, password);
+    if (errorMessage) {
+      setError(errorMessage);
     }
   };
 

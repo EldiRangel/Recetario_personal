@@ -30,7 +30,7 @@ function NewGroupForm() {
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setError('');
     const trimmedName = name.trim();
     if (!trimmedName) {
@@ -41,13 +41,13 @@ function NewGroupForm() {
       setError(`El nombre debe tener entre ${LIMITS.groupName.min} y ${LIMITS.groupName.max} caracteres.`);
       return;
     }
-    const ok = addGroup({
+    const errorMessage = await addGroup({
       name: name.trim(),
       description: description.trim() || undefined,
       recipeIds: [],
     });
-    if (!ok) {
-      setError('Ya existe un grupo con este nombre.');
+    if (errorMessage) {
+      setError(errorMessage);
       return;
     }
     // Regresar a la pantalla anterior 

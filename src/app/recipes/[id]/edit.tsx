@@ -65,7 +65,7 @@ function RecipeEditForm({ recipe }: { recipe: Recipe }) {
     setSelectedGroupIds((prev) => (prev.includes(id) ? prev.filter((g) => g !== id) : [...prev, id]));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setError('');
     const trimmedTitle = title.trim();
     if (!trimmedTitle) {
@@ -86,7 +86,7 @@ function RecipeEditForm({ recipe }: { recipe: Recipe }) {
       .map((i) => ({ id: String(Date.now() + Math.random()), name: i.name.trim(), quantity: i.quantity.trim() }));
     const st = steps.filter((s) => s.trim());
 
-    const ok = updateRecipe(recipe.id, {
+    const errorMessage = await updateRecipe(recipe.id, {
       title: title.trim(),
       description: description.trim(),
       category: category.trim() || undefined,
@@ -97,20 +97,20 @@ function RecipeEditForm({ recipe }: { recipe: Recipe }) {
       steps: st,
     });
 
-    if (!ok) {
-      setError('Ya existe otra receta con este título.');
+    if (errorMessage) {
+      setError(errorMessage);
       return;
     }
 
     // Sincronizar la relación muchos-a-muchos con los grupos seleccionados.
     const current = new Set(recipe.groupIds);
     const next = new Set(selectedGroupIds);
-    next.forEach((gid) => {
-      if (!current.has(gid)) addRecipeToGroup(recipe.id, gid);
-    });
-    current.forEach((gid) => {
-      if (!next.has(gid)) removeRecipeFromGroup(recipe.id, gid);
-    });
+    for (const gid of next) {
+      if (!current.has(gid)) await addRecipeToGroup(recipe.id, gid);
+    }
+    for (const gid of current) {
+      if (!next.has(gid)) await removeRecipeFromGroup(recipe.id, gid);
+    }
 
     router.dismissTo(`/recipes/${recipe.id}`);
   };
@@ -122,8 +122,7 @@ function RecipeEditForm({ recipe }: { recipe: Recipe }) {
         text: 'Eliminar',
         style: 'destructive',
         onPress: () => {
-          deleteRecipe(recipe.id);
-          router.dismissAll();
+          void deleteRecipe(recipe.id).then(() => router.dismissAll());
         },
       },
     ]);

@@ -25,7 +25,7 @@ export default function ProfileScreen() {
 }
 
 function ProfileForm({ user }: { user: User }) {
-  const { users, updateProfile, deleteAccount, logout, recipes, groups } = useApp();
+  const { updateProfile, deleteAccount, logout, recipes, groups } = useApp();
   const theme = useTheme();
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
@@ -52,19 +52,27 @@ function ProfileForm({ user }: { user: User }) {
     try {
       const uri = await pickAvatar();
       if (!uri) return; // El usuario canceló la selección.
-      updateProfile({ avatar: uri });
+      const errorMessage = await updateProfile({ avatar: uri });
+      if (errorMessage) {
+        setError(errorMessage);
+        return;
+      }
       showSuccess('Foto de perfil actualizada.');
     } catch {
       Alert.alert('Permiso necesario', 'Concede acceso a tus fotos para poder elegir una imagen de perfil.');
     }
   };
 
-  const handleRemoveAvatar = () => {
-    updateProfile({ avatar: undefined });
+  const handleRemoveAvatar = async () => {
+    const errorMessage = await updateProfile({ avatar: undefined });
+    if (errorMessage) {
+      setError(errorMessage);
+      return;
+    }
     showSuccess('Foto de perfil eliminada.');
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     const trimmedName = name.trim();
     const trimmedEmail = email.trim();
     setMessage('');
@@ -87,14 +95,12 @@ function ProfileForm({ user }: { user: User }) {
       return;
     }
 
-    // El correo debe seguir siendo único entre las cuentas registradas.
-    const emailTaken = users.some((u) => u.id !== user.id && u.email === trimmedEmail.toLowerCase());
-    if (emailTaken) {
-      setError('Ya existe una cuenta registrada con este correo.');
+    // El servidor valida que el correo siga siendo único entre las cuentas.
+    const errorMessage = await updateProfile({ name: trimmedName, email: trimmedEmail });
+    if (errorMessage) {
+      setError(errorMessage);
       return;
     }
-
-    updateProfile({ name: trimmedName, email: trimmedEmail });
     showSuccess('Perfil actualizado correctamente.');
   };
 
@@ -107,7 +113,9 @@ function ProfileForm({ user }: { user: User }) {
         {
           text: 'Eliminar',
           style: 'destructive',
-          onPress: () => deleteAccount(),
+          onPress: () => {
+            void deleteAccount();
+          },
         },
       ]
     );

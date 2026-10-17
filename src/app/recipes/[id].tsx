@@ -53,12 +53,13 @@ export default function RecipeDetailScreen() {
         text: 'Eliminar',
         style: 'destructive',
         onPress: () => {
-          deleteRecipe(recipe.id);
-          if (router.canGoBack()) {
-            router.back();
-          } else {
-            router.replace('/recipes');
-          }
+          void deleteRecipe(recipe.id).then(() => {
+            if (router.canGoBack()) {
+              router.back();
+            } else {
+              router.replace('/recipes');
+            }
+          });
         },
       },
     ]);
@@ -67,7 +68,7 @@ export default function RecipeDetailScreen() {
   const handleRemoveFromGroup = (groupId: string, groupName: string) => {
     Alert.alert('Quitar del grupo', `¿Quitar "${recipe.title}" del grupo "${groupName}"? La receta no se borrará.`, [
       { text: 'Cancelar', style: 'cancel' },
-      { text: 'Quitar', onPress: () => removeRecipeFromGroup(recipe.id, groupId) },
+      { text: 'Quitar', onPress: () => void removeRecipeFromGroup(recipe.id, groupId) },
     ]);
   };
 
